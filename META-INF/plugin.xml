@@ -1,0 +1,18 @@
+<idea-plugin version="2">
+    <id>VersionOne</id>
+    <name>VersionOne task provider</name>
+    <version>1.0</version>
+    <category>TeamWork</category>
+    <vendor email="patricksafarov@gmail.com">Patrick Safarov</vendor>
+
+    <description>Task provider for Version One platform</description>
+
+    <depends>com.intellij.tasks</depends>
+
+    <idea-version since-build="131"/>
+
+    <extensions defaultExtensionNs="com.intellij">
+      <tasks.repositoryType implementation="com.psafarov.intellij.versionone.VersionOneRepositoryType"/>
+    </extensions>
+
+</idea-plugin>
