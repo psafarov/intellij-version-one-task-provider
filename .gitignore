@@ -1,4 +1,6 @@
 # IntelliJ project files
+.idea/workspace.xml
+
 out
 project
 target
