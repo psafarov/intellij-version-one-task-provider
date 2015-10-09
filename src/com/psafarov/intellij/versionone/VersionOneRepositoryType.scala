@@ -15,9 +15,10 @@ class VersionOneRepositoryType extends BaseRepositoryType[VersionOneRepository] 
 
   override def getRepositoryClass = classOf[VersionOneRepository]
 
-  override def createEditor(repository: VersionOneRepository,
-                            project: Project,
-                            changeListener: Consumer[VersionOneRepository]) =
+  override def createEditor(
+       repository: VersionOneRepository,
+       project: Project,
+       changeListener: Consumer[VersionOneRepository]) =
     new VersionOneRepositoryEditor(repository, project, changeListener)
 
 }

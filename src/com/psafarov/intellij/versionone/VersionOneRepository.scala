@@ -2,6 +2,8 @@ package com.psafarov.intellij.versionone
 
 import javax.xml.datatype.DatatypeFactory
 
+import scala.util.parsing.json._
+
 import com.intellij.openapi.util.io.StreamUtil
 import com.intellij.openapi.vfs.CharsetToolkit
 import com.intellij.tasks.TaskRepository.CancellableConnection
@@ -9,7 +11,6 @@ import com.intellij.tasks.impl.BaseRepositoryImpl
 import com.intellij.tasks.{Comment, Task, TaskType}
 import com.intellij.util.xmlb.annotations.Tag
 import org.apache.commons.httpclient.methods.{PostMethod, StringRequestEntity}
-import scala.util.parsing.json._
 
 @Tag("VersionOne")
 class VersionOneRepository(repositoryType: VersionOneRepositoryType) extends BaseRepositoryImpl(repositoryType) {
@@ -49,14 +50,14 @@ class VersionOneRepository(repositoryType: VersionOneRepositoryType) extends Bas
     createTask(getTaskMapList(json).head)
   }
 
-  override def getIssues(_query: String, offset: Int, limit: Int, withClosed: Boolean): Array[Task] = {
+  override def getIssues(keyword: String, offset: Int, limit: Int, withClosed: Boolean): Array[Task] = {
     val query = new Query
     query.sort += "-ID"
     query.offset = offset
     query.limit = limit
 
-    if (_query != null) {
-      query.find = _query
+    if (keyword != null) {
+      query.find = keyword
       query.findIn += "Name"
     }
 
@@ -76,7 +77,7 @@ class VersionOneRepository(repositoryType: VersionOneRepositoryType) extends Bas
   }
 
   protected def getTaskMapList(value: Option[Any]) = value match {
-    case Some(List(list)) if list.isInstanceOf[List[taskMap]] => list.asInstanceOf[List[taskMap]]
+    case Some(List(list: List[this.taskMap])) => list
     case _ => throw new Exception("Server returned invalid response")
   }
 
@@ -100,7 +101,7 @@ class VersionOneRepository(repositoryType: VersionOneRepositoryType) extends Bas
     case _        => TaskType.OTHER
   }
 
-  protected def parseDate(date: String) = 
+  protected def parseDate(date: String) =
     DatatypeFactory.newInstance.newXMLGregorianCalendar(date).toGregorianCalendar.getTime
 
   protected def createRequest(requestBody: String = "") = {
@@ -109,7 +110,7 @@ class VersionOneRepository(repositoryType: VersionOneRepositoryType) extends Bas
     method.setRequestEntity(requestEntity)
     method
   }
-  
+
   protected def sendRequest(request: PostMethod) = getHttpClient.executeMethod(request) match {
     case 200 =>
     case 400 => throw new Exception("Query is incorrect")
