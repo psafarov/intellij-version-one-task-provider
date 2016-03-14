@@ -18,11 +18,18 @@ class VersionOneRepositoryEditor(repository: VersionOneRepository, project: Proj
   var myScopeInput: ComboBox = _
   installListener(myScopeInput)
 
+  var myNicknameLabel: JBLabel = _
+  var myNicknameInput: JBTextField = _
+  installListener(myNicknameInput)
+
   var myTeamLabel: JBLabel = _
   var myTeamInput: JBTextField = _
   installListener(myTeamInput)
 
   override def createCustomPanel = {
+    myNicknameLabel = new JBLabel("Nickname:", SwingConstants.RIGHT)
+    myNicknameInput = new JBTextField(repository.getNickname)
+
     myScopeLabel = new JBLabel("Scope:", SwingConstants.RIGHT)
     val myScopeModel = new ListComboBoxModel(Scope.values.toList)
     myScopeModel.setSelectedItem(repository.getScope)
@@ -33,6 +40,7 @@ class VersionOneRepositoryEditor(repository: VersionOneRepository, project: Proj
     switchTeamInput()
 
     FormBuilder.createFormBuilder
+      .addLabeledComponent(myNicknameLabel, myNicknameInput)
       .addLabeledComponent(myScopeLabel, myScopeInput)
       .addLabeledComponent(myTeamLabel, myTeamInput)
       .setVertical(false)
@@ -43,6 +51,7 @@ class VersionOneRepositoryEditor(repository: VersionOneRepository, project: Proj
     super.apply()
     repository.setScope(myScopeInput.getSelectedItem.toString)
     repository.setTeam(myTeamInput.getText)
+    repository.setNickname(myNicknameInput.getText)
     switchTeamInput()
   }
 
@@ -51,6 +60,7 @@ class VersionOneRepositoryEditor(repository: VersionOneRepository, project: Proj
 
   override def setAnchor(anchor: JComponent) = {
     super.setAnchor(anchor)
+    myNicknameLabel.setAnchor(anchor)
     myScopeLabel.setAnchor(anchor)
     myTeamLabel.setAnchor(anchor)
   }

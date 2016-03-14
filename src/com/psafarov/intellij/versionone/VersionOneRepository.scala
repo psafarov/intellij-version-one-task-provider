@@ -21,6 +21,7 @@ class VersionOneRepository(repositoryType: VersionOneRepositoryType) extends Bas
 
   var myScope = Scope.ALL
   var myTeam = ""
+  var myNickname = ""
 
   def this() = this(null)
 
@@ -30,12 +31,16 @@ class VersionOneRepository(repositoryType: VersionOneRepositoryType) extends Bas
   def getTeam = myTeam
   def setTeam(team: String) = myTeam = team
 
+  def getNickname = myNickname
+  def setNickname(nickname: String) = myNickname = nickname
+
   override def clone() = {
     val cloned = new VersionOneRepository(getRepositoryType.asInstanceOf[VersionOneRepositoryType])
     cloned.setUrl(getUrl)
     cloned.setPassword(getPassword)
     cloned.setUsername(getUsername)
     cloned.setUseProxy(isUseProxy)
+    cloned.myNickname = myNickname
     cloned.myScope = myScope
     cloned.myTeam = myTeam
     cloned
@@ -68,7 +73,7 @@ class VersionOneRepository(repositoryType: VersionOneRepositoryType) extends Bas
     myScope match {
       case Scope.ALL =>
       case Scope.TEAM => query.where("Team.Name") = myTeam
-      case Scope.USER => query.where("Owners.Nickname") = getUsername
+      case Scope.USER => query.where("Owners.Nickname") = myNickname
     }
 
     val json = sendQuery(query)
