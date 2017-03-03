@@ -8,11 +8,17 @@
     <description>Task provider for Version One platform</description>
 
     <depends>com.intellij.tasks</depends>
+    <depends>com.jetbrains.plugins.webDeployment</depends>
 
     <idea-version since-build="131"/>
 
     <extensions defaultExtensionNs="com.intellij">
       <tasks.repositoryType implementation="com.psafarov.intellij.versionone.VersionOneRepositoryType"/>
     </extensions>
-
+    <actions>
+        <group id="MyPlugin.SampleMenu" text="_Sample Menu" description="Sample menu">
+            <add-to-group group-id="MainMenu" anchor="last"  />
+            <action id="Myplugin.Textboxes" class="com.psafarov.intellij.versionone.Test2" text="Text _Boxes" description="A test menu item" />
+        </group>
+    </actions>
 </idea-plugin>
